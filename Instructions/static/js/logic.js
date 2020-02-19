@@ -1,13 +1,13 @@
 // Create a map object
 var myMap = L.map("map", {
-    center: [37.090240, -95.712891],
+    center: [15.5994, -28.6731],
     zoom: 5
   });
   
   L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
-    id: "mapbox.streets-basic",
+    id: "mapbox.streets-satellite",
     accessToken: API_KEY
   }).addTo(myMap);
 
@@ -32,68 +32,73 @@ var myMap = L.map("map", {
         console.log(location)
 
         var color = "";
-        if (magnitude > 8) {
-            color = 'red';
+        if (magnitude > 5) {
+            color = '#EA2C2C';
          }
-        else if (magnitude > 7) {
-          color = "orange";
+        else if (magnitude > 4) {
+          color = "#EA822C";
          }
-         else if (magnitude > 6) {
-           color = "yellow";
+         else if (magnitude > 3) {
+           color = "#EE9C00";
          }
-         else if (magnitude > 5) {
-            color = "yellow";
-          }
-          else if (magnitude > 4) {
-            color = "yellow";
-          }
-          else if (magnitude > 3) {
-            color = "yellow";
-          }
-          else if (magnitude > 2) {
-            color = "yellow";
+         else if (magnitude > 2) {
+            color = "#EECC00";
           }
           else if (magnitude > 1) {
-            color = "yellow";
+            color = "#D4EE00";
           }
           else {
-            color = "green";
-         }
-    }
-    
+            color = "#98EE00";
+         };
+
     // Add circles to map
     L.circle(location, {
       fillOpacity: 0.75,
       color: "white",
       fillColor: color,
       // Adjust radius
-      radius: 4000
+      radius: magnitude*10000
     }).bindPopup("<h1>Location:" + location + "</h1> <hr> <h3>Magnitude: " + magnitude + "</h3>").addTo(myMap);
+    
+    
+  
+  }
+  var legend = L.control({position: 'bottomright'});
 
-    var legend = L.control({position: 'bottomright'});
+  legend.onAdd = function() {
 
-legend.onAdd = function (map) {
-
-    var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10],
-        labels = [];
+    var div = L.DomUtil.create('div', 'info legend');
+    var grades = [0, 1, 2, 3, 4, 5];
+    // var colors = [
+    //   "#98EE00",
+    //   "#D4EE00",
+    //   "#EECC00",
+    //   "#EE9C00",
+    //   "#EA822C",
+    //   "#EA2C2C"
+    // ];
+    var labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-    }
-
+      div.innerHTML +=
+      '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+        grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
+    };
     return div;
 };
 
-legend.addTo(map);
-
-
-
+legend.addTo(myMap);
 });
 
+function getColor(i) {
+  return i > 5 ? '#F30' :
+  i > 4  ? '#F60' :
+  i > 3  ? '#F90' :
+  i > 2  ? '#FC0' :
+  i > 1   ? '#FF0' :
+            '#9F3';
+}
 
   // Country data
 // var countries = [
