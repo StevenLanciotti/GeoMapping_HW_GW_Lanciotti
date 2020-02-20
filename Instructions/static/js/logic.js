@@ -7,7 +7,7 @@ var myMap = L.map("map", {
   L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
-    id: "mapbox.streets-satellite",
+    id: "mapbox.streets-basic",
     accessToken: API_KEY
   }).addTo(myMap);
 
@@ -67,22 +67,24 @@ var myMap = L.map("map", {
 
   legend.onAdd = function() {
 
-    var div = L.DomUtil.create('div', 'info legend');
+    var div = L
+    .DomUtil
+    .create('div', 'info legend');
     var grades = [0, 1, 2, 3, 4, 5];
-    // var colors = [
-    //   "#98EE00",
-    //   "#D4EE00",
-    //   "#EECC00",
-    //   "#EE9C00",
-    //   "#EA822C",
-    //   "#EA2C2C"
-    // ];
+    var colors = [
+      "#98ee00",
+      "#d4ee00",
+      "#eecc00",
+      "#ee9c00",
+      "#ea822c",
+      "#ea2c2c"
+    ];
     var labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML +=
-      '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+      '<i style="background: ' + colors[i] + '"></i> ' +
         grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
     };
     return div;
